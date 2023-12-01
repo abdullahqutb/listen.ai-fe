@@ -4,9 +4,42 @@
     style="background-color: aliceblue;"
   >
     <div class="flex items-center">
-      <a href="/"><img src="@/assets/images/logo.svg" alt="Logo" class="youtil-logo" /></a>
+      <router-link :to="{ name: 'HomeView' }">
+        <img src="@/assets/images/logo.png" width="50" alt="Logo" class="youtil-logo" />
+      </router-link>
+    </div>
+    <div>
+      <h1 class="text-5xl">LISTEN.AI</h1>
+    </div>
+    <div class="flex gap-x-10 items-center">
+      <div class="md:flex hidden gap-x-10 navLinks">
+        <router-link :to="{ name: 'AboutView' }">About</router-link>
+      </div>
+      <div class="flex items-center gap-x-2" v-if="!loggedIn">
+        <UserCircleIcon class="h-6 w-6 text-blue-500" />
+        <router-link :to="{ name: 'LoginView' }">LOGIN</router-link>
+      </div>
+      <div class="flex items-center gap-x-2" v-else>
+        <UserCircleIcon class="h-6 w-6 text-blue-500" />
+        {{ user.name }}
+        <button @click="logout">
+          <ArrowRightCircleIcon class="h-6 w-6 text-blue-500" />
+        </button>
+      </div>
     </div>
     <transition name="menu">
+      <div
+        v-if="isMenuOpen"
+        class="md:hidden absolute top-0 right-0 h-screen w-3/4 bg-gray-200 text-white flex flex-col p-4 duration-300 transition z-10"
+      >
+        <a
+          href="/"
+          target="'_blank'"
+          class="block text-gray-900 hover:text-gray-500 mb-2 ml-2 mt-20 uppercase"
+        >
+          Home
+        </a>
+      </div>
     </transition>
     <div class="md:hidden flex items-center">
       <button
@@ -32,24 +65,20 @@
   </nav>
 </template>
 
-<script>
-export default {
-  name: 'navbar-component',
-  inheritAttrs: false,
-  customOptions: {}
-}
-</script>
 <script setup>
-import { ref, watch } from 'vue'
-// import { useHomeStore, useAuthStore, useCampaignStore } from '@/stores'
-// import { useRouter } from 'vue-router'
+import { onMounted, ref, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/auth'
+import { UserCircleIcon, ArrowRightCircleIcon } from '@heroicons/vue/24/solid'
 
-// const router = useRouter()
-// const campaignStore = useCampaignStore()
+// Auth Store
+const authStore = useAuthStore()
+const { user, loggedIn } = storeToRefs(authStore)
 
-// const goToLoginPage = () => {
-//   router.push({ name: 'LoginPage', params: { campaign: campaignStore.activeCampaign?.domain }})
-// }
+onMounted(async () => {
+  // Check if user is logged in
+  await authStore.getUserDetails()
+})
 
 const isMenuOpen = ref(false)
 
@@ -63,6 +92,9 @@ function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value
 }
 
+function logout() {
+  authStore.logout()
+}
 </script>
 
 <style scoped lang="scss">
