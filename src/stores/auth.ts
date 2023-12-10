@@ -104,14 +104,29 @@ export const useAuthStore = defineStore('auth',{
       })
     },
     logout() {
-      this.user = {
-        username: '',
-        email: '',
-        name: '',
-        surname: '',
-      };
-      this.loggedIn = false;
-      localStorage.removeItem('token');
+      return new Promise((resolve, reject) => {
+        this.isLoading = true
+        const token = localStorage.getItem('token')
+        api.get(`/accounts/logout/`, {
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        })
+          .then(res => {
+            this.user = {
+              username: '',
+              email: '',
+              name: '',
+              surname: '',
+            };
+            this.loggedIn = false;
+            localStorage.removeItem('token');
+            resolve(res.data)
+          })
+          .catch(error => {
+            console.error('Failed to logout:', error)
+          })
+      })
     }
   }
 });
