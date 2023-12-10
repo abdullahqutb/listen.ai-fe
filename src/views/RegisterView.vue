@@ -3,8 +3,8 @@
     class="w-full flex flex-col justify-center items-center self-center my-16"
   >
     <Form
-      id="loginForm"
-      ref="loginForm"
+      id="registerForm"
+      ref="registerForm"
       v-slot="{ meta }"
       class="flex flex-col w-3/4 sm:w-1/2 my-8 px-8 md:px-20 lg:px-40 py-12 shadow-2xl"
     >
@@ -14,7 +14,7 @@
       <label for="email">First Name</label>
       <Field
         id="name"
-        v-model:model-value="formData.name"
+        v-model:model-value="formData.first_name"
         name="name"
         rules="required|name"
         as="input"
@@ -29,7 +29,7 @@
       <label class="mt-4" for="surname">Last Name</label>
       <Field
         id="surname"
-        v-model:model-value="formData.surname"
+        v-model:model-value="formData.last_name"
         name="surname"
         rules="required|name"
         as="input"
@@ -56,6 +56,21 @@
       <small class="form-text text-red-400">
         <ErrorMessage name="email" />
       </small>
+
+      <label class="mt-4" for="username">Username</label>
+      <Field
+        id="username"
+        v-model:model-value="formData.username"
+        name="username"
+        rules="required"
+        as="input"
+        placeholder="Username"
+        class="px-4 py-2 border border-gray-400 w-full min-h-[45px]"
+      >
+      </Field>
+      <small class="form-text text-red-400">
+        <ErrorMessage name="username" />
+      </small>
       
       <label class="mt-4" for="password">Password</label>
       <Field
@@ -74,7 +89,7 @@
       </small>
       <button
         class="btn btn-primary my-4"
-        @click="register"
+        @click.prevent="register"
         :disabled="!meta.valid"
       >
         Register
@@ -89,7 +104,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
@@ -99,15 +114,16 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 const formData = ref({
-  name: '',
-  surname: '',
+  username: '',
   email: '',
-  password: ''
+  password: '',
+  first_name: '',
+  last_name: '',
 })
 
 const register = async () => {
-  await authStore.register({ ...formData.value })
-  router.push({ name: 'Home' })
+  await authStore.register(formData.value)
+  router.push({ name: 'LoginView' })
 }
 
 </script>
