@@ -12,9 +12,6 @@
       <h1 class="text-5xl">LISTEN.AI</h1>
     </div>
     <div class="flex gap-x-10 items-center">
-      <div class="md:flex hidden gap-x-10 navLinks">
-        <router-link :to="{ name: 'AboutView' }">About</router-link>
-      </div>
       <div class="flex items-center gap-x-2" v-if="!loggedIn">
         <UserCircleIcon class="h-6 w-6 text-blue-500" />
         <router-link :to="{ name: 'LoginView' }">LOGIN</router-link>
@@ -65,7 +62,7 @@
   </nav>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'

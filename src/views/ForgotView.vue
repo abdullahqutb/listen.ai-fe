@@ -1,8 +1,8 @@
 <template>
   <div class="w-full flex flex-col justify-center items-center self-center my-16">
     <Form
-      id="loginForm"
-      ref="loginForm"
+      id="forgotForm"
+      ref="forgotForm"
       v-slot="{ meta }"
       class="flex flex-col w-3/4 sm:w-1/2 my-8 px-8 md:px-20 lg:px-40 py-12 shadow-2xl"
     >
@@ -29,7 +29,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useAuthStore } from '@/stores/auth'
 import { ref } from 'vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'

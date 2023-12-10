@@ -4,9 +4,9 @@ import { required, email } from '@vee-validate/rules';
 export const setupValidationRules = () => {
   defineRule('required', required);
   defineRule('email', email);
-  defineRule('password', value => /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\W_]{8,}$/.test(value))
-  defineRule('phone', value => /^(\+4|0)[0-9]{9}$/.test(value))
-  defineRule('name', value => /^[a-zA-Z\s]*$/.test(value))
+  defineRule('password', (value: string) => /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d\W_]{8,}$/.test(value))
+  defineRule('phone', (value: string) => /^(\+4|0)[0-9]{9}$/.test(value))
+  defineRule('name', (value: string) => /^[a-zA-Z\s]*$/.test(value))
 
   // Other Vee-Validate configuration
   configure({
